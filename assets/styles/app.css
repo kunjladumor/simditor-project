@@ -1,0 +1,372 @@
+@charset "UTF-8";
+/* SCSS */
+/* SCSS */
+/* ===== Usage ===== */
+:root {
+  --clr-primary: #851c3b;
+  --clr-on-primary: #b57788;
+  --clr-primary-2: #3a0a31;
+  --clr-on-primary-2: #ccc;
+  --clr-secondary: #e6073d;
+  --clr-on-secondary: #fff;
+  --clr-secondary-2: #ffcc66;
+  --clr-secondary-3: #fdec5d;
+  --clr-on-secondary-2: #13181b;
+  --clr-on-secondary-2: #13181b;
+  --clr-body: #f8fafc;
+  --clr-on-body: #000;
+  --clr-surface: #e7ecee;
+  --clr-on-surface: #1e252a;
+  --clr-neutral: gray;
+  --clr-danger: #c62828;
+  --clr-success: #7db70d;
+  --clr-info: #09f;
+  --clr-warning: #fc6c11;
+  --clr-link: #307abb;
+  --clr-white: #fff;
+  --clr-neutral-5: #1e252a;
+  --clr-neutral-10: #283339;
+  --clr-neutral-20: #3d4d57;
+  --clr-neutral-30: #526875;
+  --clr-neutral-40: #678293;
+  --clr-neutral-50: #849ba9;
+  --clr-neutral-60: #a2b3be;
+  --clr-neutral-70: #c0ccd3;
+  --clr-neutral-75: #cfd8dd;
+  --clr-neutral-80: #dee4e8;
+  --clr-neutral-85: #edf0f2;
+  --clr-neutral-90: #fcfdfd;
+  --clr-neutral-95: white;
+  --clr-black: #13181b;
+  /*========== Font and typography ==========*/
+  /*.5rem = 8px | 1rem = 16px ...*/
+  --font-size: 1rem;
+  --font-size-sm: 0.875rem;
+  --font-size-xs: 0.75rem;
+  --font-size-xxs: 0.5rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-xxl: 1.5rem;
+  --font-size-h1: 2.5rem;
+  --font-size-h2: 2rem;
+  --font-size-h3: 1.75rem;
+  --font-size-h4: 1.5rem;
+  --font-size-h5: 1.25rem;
+  --font-size-h6: 1rem;
+  /* https://matthewjamestaylor.com/responsive-padding#magic-formula */
+  --rs-spacing: calc(8px + 1.5625vw);
+  /*========== Font Family ==========*/
+  --font-family-1: Open Sans, Arial, Helvetica, sans-serif;
+  --font-family-2: Oswald, Arial, Helvetica, sans-serif;
+  --beginner-color: DarkOliveGreen;
+  --explorer-color: OliveDrab;
+  --navigator-color: ForestGreen;
+  --voyager-color: MediumSeaGreen;
+  --dazzler-color: Teal;
+  --rocker-color: #21b8ca;
+  --sparkler-color: DodgerBlue;
+  --stunner-color: #6f00ff;
+  --trailblazer-color: #6751eb;
+  --achiever-color: #563399;
+  --elite-color: #610082;
+  --master-color: DarkViolet;
+  --legend-color: MediumOrchid;
+  --icon-color: #a500a5;
+  --titan-color: MediumVioletRed;
+  --coolbie-color: DeepPink;
+  --cool-viewbie-color: #ee6f89;
+  --viewbie-color: #e84263;
+  --moderator-color: Crimson;
+  --channel-moderator-color: OrangeRed;
+  --global-moderator-color: #f28c28;
+  --admin-color: #ffac1c;
+  --staff-color: DimGray;
+  --alumni-color: DarkSlateGray;
+}
+
+html {
+  /* Box sizing rules */
+  box-sizing: border-box;
+  font-size: 16px;
+  /* Prevent font size inflation - Andy Bell*/
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit; /* https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+  margin: 0;
+  padding: 0;
+  scrollbar-color: rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2);
+  scrollbar-width: thin;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased; /* 4. Improve text rendering */
+  overflow-x: hidden;
+}
+@media only screen and (max-width: 767.98px) {
+  body {
+    margin-top: 52px;
+  }
+}
+
+/* Set shorter line heights on headings and interactive elements */
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
+  line-height: 1.1;
+}
+
+/* Balance text wrapping on headings */
+/*
+  7. Avoid text overflows
+*/
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+  padding: 0;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  -webkit-text-decoration-skip: ink;
+  text-decoration-skip-ink: auto;
+  color: currentColor;
+}
+
+a {
+  text-decoration: none;
+  color: var(--clr-on-body);
+  cursor: pointer;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Make images easier to work with */
+/* Improve media defaults */
+img,
+picture,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+svg {
+  max-width: 100%;
+  max-height: 40px;
+  vertical-align: middle;
+}
+
+button,
+fieldset,
+input,
+legend,
+select,
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid var(--clr-black);
+  background-color: var(--clr-white);
+  border-radius: 0.25rem;
+  resize: none;
+}
+
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+  font: 1rem/1.5 sans-serif;
+  display: block;
+  box-sizing: border-box;
+  padding: 0 0.25rem;
+  cursor: text;
+  border: 1px solid var(--clr-neutral-60);
+}
+input[type="text"]::-moz-placeholder,
+input[type="email"]::-moz-placeholder,
+select::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: var(--clr-neutral-70);
+  font-size: 14px;
+}
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+select::placeholder,
+textarea::placeholder {
+  color: var(--clr-neutral-70);
+  font-size: 14px;
+}
+
+textarea {
+  height: 100%;
+  min-height: 7.5rem;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  font-size: 100%;
+  box-sizing: border-box;
+}
+
+select {
+  background: url("/assets/svg/arrow-drop-down.svg") no-repeat center right 0;
+  background-color: var(--clr-white);
+  cursor: pointer;
+  -webkit-appearance: none; /* Remove default styling on iOS */
+  -moz-appearance: none; /* Remove default styling on Firefox */
+  appearance: none; /* Remove default styling on modern browsers */
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  height: 1rem;
+  width: 1rem;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  border-radius: 50%;
+}
+
+input[type="radio"]:checked {
+  background-image: radial-gradient(
+    var(--clr-secondary) 40%,
+    transparent calc(40% + 1px)
+  );
+}
+
+input[type="checkbox"]:checked {
+  background: url("/assets/svg/check.svg") no-repeat center/75% auto;
+}
+
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  cursor: pointer;
+}
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+  text-decoration: underline;
+  scale: 1.02;
+}
+
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  opacity: 1; /* Firefox */
+  color: var(--clr-neutral-30);
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1; /* Firefox */
+  color: var(--clr-neutral-30);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--clr-white);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--clr-white);
+}
+
+/* Anything that has been anchored to should have extra scroll margin */
+:target {
+  scroll-margin-block: 5ex;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  font-size: 16px;
+}
+
+body {
+  background-color: var(--clr-body);
+  color: var(--clr-on-body);
+  font-family: "Open Sans", sans-serif;
+}

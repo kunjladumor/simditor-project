@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "name": "春雨😊✈️",
+    "abbr": "cy",
+    "url": "http://www.example.com"
+  },
+  {
+    "id": 2,
+    "name": "夏荷😢",
+    "abbr": "xh"
+  },
+  {
+    "id": 3,
+    "name": "秋叶",
+    "abbr": "qy"
+  },
+  {
+    "id": 4,
+    "name": "冬雪",
+    "abbr": "dx"
+  },
+  {
+    "id": 5,
+    "name": "Snow❄️",
+    "abbr": "Snow"
+  },
+  {
+    "id": 6,
+    "name": "Simditor Mention",
+    "abbr": "simditormention"
+  }
+]

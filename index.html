@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simditor Demo</title>
+
+    <link media="all" rel="stylesheet" href="assets/styles/app.css" />
+    <link media="all" rel="stylesheet" href="assets/styles/simditor.css" />
+    <link
+      media="all"
+      rel="stylesheet"
+      href="assets/styles/simditor-emoji.css"
+    />
+    <link
+      media="all"
+      rel="stylesheet"
+      href="assets/styles/simditor-unsplash.css"
+    />
+
+    <script src="assets/scripts/jquery.min.js"></script>
+    <script src="assets/scripts/mobilecheck.js"></script>
+    <script type="text/javascript">
+      if (mobilecheck()) {
+        $("<link/>", {
+          media: "all",
+          rel: "stylesheet",
+          type: "text/css",
+          href: "assets/styles/mobile.css",
+        }).appendTo("head");
+      }
+    </script>
+  </head>
+  <body>
+    <section id="page-demo">
+      <textarea
+        id="txt-content"
+        data-autosave="editor-content"
+        autofocus
+        required
+      >
+      </textarea>
+    </section>
+
+    <script src="assets/scripts/module.js"></script>
+    <script src="assets/scripts/uploader.js"></script>
+    <script src="assets/scripts/hotkeys.js"></script>
+    <script src="assets/scripts/dompurify.js"></script>
+    <script src="assets/scripts/simditor.js"></script>
+    <script src="assets/scripts/simditor-emoji.js"></script>
+    <script src="assets/scripts/simditor-unsplash.js"></script>
+    <script src="assets/scripts/page-demo.js"></script>
+  </body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>Simditor Custom Menu Demo</title>
+    <link media="all" rel="stylesheet" href="assets/styles/simditor.css" />
+    <link
+      media="all"
+      rel="stylesheet"
+      href="assets/styles/simditor-emoji.css"
+    />
+    <link
+      media="all"
+      rel="stylesheet"
+      href="assets/styles/simditor-addmedia.css"
+    />
+    <link
+      media="all"
+      rel="stylesheet"
+      href="assets/styles/simditor-mention.css"
+    />
+    <script src="assets/scripts/jquery.min.js"></script>
+    <script src="assets/scripts/mobilecheck.js"></script>
+    <script type="text/javascript">
+      if (mobilecheck()) {
+        $("<link/>", {
+          media: "all",
+          rel: "stylesheet",
+          type: "text/css",
+          href: "assets/styles/mobile.css",
+        }).appendTo("head");
+      }
+    </script>
+  </head>
+  <body>
+    <textarea id="editor" placeholder="Write your text here.."></textarea>
+
+    <script src="assets/scripts/module.js"></script>
+    <script src="assets/scripts/uploader.js"></script>
+    <script src="assets/scripts/hotkeys.js"></script>
+    <script src="assets/scripts/dompurify.js"></script>
+    <script src="assets/scripts/simditor.js"></script>
+    <script src="assets/scripts/simditor-emoji.js"></script>
+    <script src="assets/scripts/simditor-mention.js"></script>
+    <script src="assets/scripts/simditor-dropzone.js"></script>
+
+    <!-- Use this script for calling Local JSON file -->
+    <script src="assets/scripts/addmedia.js"></script>
+
+    <!-- Use this script for API Calls -->
+    <!-- <script src="assets/scripts/addmedia_v1.js"></script> -->
+
+    <script type="text/javascript">
+      $(function () {
+        $.getJSON("simditor-mention.json", function (data) {
+          Simditor.locale = "en-US";
+          var editor = new Simditor({
+            textarea: $("#editor"),
+            pasteImage: true,
+            toolbar: ["addmedia", "bold", "italic", "underline", "image"],
+            toolbarFloat: true,
+            upload: {
+              url: "/upload",
+              params: null,
+              fileKey: "file",
+              connectionCount: 3,
+              leaveConfirm:
+                "Uploading is in progress, are you sure to leave this page?",
+            },
+            mention: {
+              items: data,
+              itemRenderer: function ($itemEl, data) {
+                var $span = $("span", $itemEl);
+                // $('<img>').attr('src', 'https://simditor.tower.im/assets/images/logo.png').addClass('avatar').insertBefore($span);
+                return $itemEl;
+              },
+              // linkRenderer: function ($linkEl, data) {
+              //   $linkEl.attr("href", "www.example.com/" + data.id);
+              // },
+            },
+          });
+
+          // $(editor).on("mention", function (e, el, data) {
+          //   var color = data.id % 2 === 0 ? "blue" : "red";
+          //   $(el).css("color", color);
+          // });
+        });
+      });
+    </script>
+  </body>
+</html>
