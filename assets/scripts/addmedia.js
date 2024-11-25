@@ -326,19 +326,11 @@
             ? `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${query}&limit=${limit}&offset=${offset}`
             : `https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=${limit}&offset=${offset}`;
 
-          // url = `/api/eximg/giphy?q=${encodeURIComponent(
-          //   query || ""
-          // )}&pn=${page}&ps=${limit}`;
-
           break;
         case "Unsplash":
           url = query
             ? `https://api.unsplash.com/search/photos?query=${query}&client_id=${UNSPLASH_ACCESS_KEY}&per_page=${limit}&page=${page}`
             : `https://api.unsplash.com/photos/random?count=${limit}&client_id=${UNSPLASH_ACCESS_KEY}`;
-
-          // url = `/api/eximg/unsplash?q=${encodeURIComponent(
-          //   query || ""
-          // )}&pn=${page}&ps=${limit}`;
 
           break;
         case "Tenor":
@@ -350,15 +342,8 @@
                 pos || ""
               }`;
 
-          //if pos is not provided, it will be set to 0
-
           pos = pos || "";
 
-          // url = `/api/eximg/tenor?q=${encodeURIComponent(
-          //   query || ""
-          // )}&ps=${limit}&pn=${page}&pc=${pos}`;
-          // console.log(page);
-          // console.log("Pos", pos);
           break;
         case "IndiaForums":
           url = `/api/eximg/ifmedia?q=${encodeURIComponent(
@@ -371,7 +356,33 @@
           break;
       }
 
-      console.log(url);
+      // switch (provider) {
+      //   case "Giphy":
+      //     url = `/api/eximg/giphy?q=${encodeURIComponent(
+      //       query || ""
+      //     )}&pn=${page}&ps=${limit}`;
+      //     break;
+      //   case "Unsplash":
+      //     url = `/api/eximg/unsplash?q=${encodeURIComponent(
+      //       query || ""
+      //     )}&pn=${page}&ps=${limit}`;
+      //     break;
+      //   case "Tenor":
+      //     pos = pos || "";
+
+      //     url = `/api/eximg/tenor?q=${encodeURIComponent(
+      //       query || ""
+      //     )}&ps=${limit}&pn=${page}&pc=${pos}`;
+      //     break;
+      //   case "IndiaForums":
+      //     url = `/api/eximg/ifmedia?q=${encodeURIComponent(
+      //       query || ""
+      //     )}&ps=${limit}&pn=${page}`;
+      //     break;
+      //   default:
+      //     url = "";
+      //     break;
+      // }
 
       return url;
     };
