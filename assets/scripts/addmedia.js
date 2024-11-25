@@ -24,9 +24,9 @@
       return child;
     };
 
-  const GIPHY_API_KEY = "tRUhe1puacG64XnKumufdd3yunw91q00";
-  const UNSPLASH_ACCESS_KEY = "S6dwtFdIjNtre8yyA2IJ2DVv84nGFyGPFmg-WO7FnXQ";
-  const TENOR_API_KEY = "AIzaSyBZiBelZJMBmMiwgd1jfTKUhK8kBYfIAho";
+  // const GIPHY_API_KEY = "tRUhe1puacG64XnKumufdd3yunw91q00";
+  // const UNSPLASH_ACCESS_KEY = "S6dwtFdIjNtre8yyA2IJ2DVv84nGFyGPFmg-WO7FnXQ";
+  // const TENOR_API_KEY = "AIzaSyBZiBelZJMBmMiwgd1jfTKUhK8kBYfIAho";
 
   AddMediaButton = (function (_super) {
     __extends(AddMediaButton, _super);
