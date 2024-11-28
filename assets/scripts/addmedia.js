@@ -24,9 +24,9 @@
       return child;
     };
 
-  // const GIPHY_API_KEY = "tRUhe1puacG64XnKumufdd3yunw91q00";
-  // const UNSPLASH_ACCESS_KEY = "S6dwtFdIjNtre8yyA2IJ2DVv84nGFyGPFmg-WO7FnXQ";
-  // const TENOR_API_KEY = "AIzaSyBZiBelZJMBmMiwgd1jfTKUhK8kBYfIAho";
+  const GIPHY_API_KEY = "tRUhe1puacG64XnKumufdd3yunw91q00";
+  const UNSPLASH_ACCESS_KEY = "S6dwtFdIjNtre8yyA2IJ2DVv84nGFyGPFmg-WO7FnXQ";
+  const TENOR_API_KEY = "AIzaSyBZiBelZJMBmMiwgd1jfTKUhK8kBYfIAho";
 
   AddMediaButton = (function (_super) {
     __extends(AddMediaButton, _super);
@@ -171,7 +171,23 @@
         var uploader = $(this).find("img").data("uploader");
         var id = $(this).find("img").data("id");
         var uploaderName = $(this).find("img").data("uploader-name");
+        var downloadLocation = $(this).find("img").data("download-link");
 
+        // Trigger the download request to validate with Unsplash
+        if (downloadLocation) {
+          fetch(downloadLocation + "?client_id=" + UNSPLASH_ACCESS_KEY)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Failed to trigger download");
+              }
+              console.log("Download triggered successfully");
+            })
+            .catch((error) => {
+              console.error("Error triggering download:", error);
+            });
+        }
+
+        // Insert the image into the editor or your application
         _this.insertImage(
           imgSrc,
           imgDesc,
@@ -181,6 +197,8 @@
           id,
           imgPageUrl
         );
+
+        // Remove the overlay after selection
         overlay.remove();
       });
 
@@ -412,7 +430,9 @@
               ? `data-uploader-name="${item.user.name}"`
               : "";
 
-            html += `<div class="image-item"><img src="${item.urls.thumb}" alt="${item.alt_description}" data-id=${item.id}  ${uploader} ${uploaderName} data-large="${item.urls.small}"><p style="font-size:12px;">${item.alt_description}</p></div>`;
+            var downloadLink = item.links.download_location;
+
+            html += `<div class="image-item"><img src="${item.urls.thumb}" alt="${item.alt_description}"  data-id=${item.id}  ${uploader} data-download-link=${downloadLink} ${uploaderName} data-large="${item.urls.small}"><p style="font-size:12px;">${item.alt_description}</p></div>`;
           });
           break;
         case "Tenor":
@@ -497,7 +517,6 @@
 
       // Wrap the img and via elements in a container div
       var containerHtml = `<addmedia>${img}${via}</addmedia>`;
-      console.log(containerHtml);
 
       // Create a jQuery object for the container
       var $container = $(containerHtml);
