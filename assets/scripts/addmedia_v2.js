@@ -230,6 +230,31 @@
 
     insertImage(imgSrc, imgDesc, uploader, uploaderName, id, imgPageUrl) {
       const via = `<span class="addmedia-pixabay">Photo by <a href="https://pixabay.com/users/${uploader}-${id}" target="_blank">${uploader}</a> on <a href="https://pixabay.com/" target="_blank">Pixabay</a></span>`;
+      const serverUrl = "/download-image"; // URL to your server endpoint for downloading images
+
+      // Send the image to the server for downloading
+      fetch(serverUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imgSrc: imgSrc,
+          imgDesc: imgDesc,
+          uploader: uploader,
+          uploaderName: uploaderName,
+          id: id,
+          imgPageUrl: imgPageUrl,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Image downloaded successfully:", data);
+        })
+        .catch((error) => {
+          console.error("Error downloading image:", error);
+        });
+
       return `<addmedia><img src="${imgSrc}" class="addmedia" alt="${imgDesc}">${via}</addmedia>`;
     }
   }
