@@ -27,6 +27,212 @@
   const GIPHY_API_KEY = "tRUhe1puacG64XnKumufdd3yunw91q00";
   const UNSPLASH_ACCESS_KEY = "S6dwtFdIjNtre8yyA2IJ2DVv84nGFyGPFmg-WO7FnXQ";
   const TENOR_API_KEY = "AIzaSyBZiBelZJMBmMiwgd1jfTKUhK8kBYfIAho";
+  const PIXABAY_API_KEY = "47351696-186299b296792d6c30a2a7826";
+
+  class Provider {
+    constructor(name) {
+      this.name = name;
+    }
+
+    getPoweredBy() {
+      return "";
+    }
+
+    getApiUrl(query, page, limit, pos) {
+      return "";
+    }
+
+    generateHtml(data, limit) {
+      return "";
+    }
+
+    insertImage(imgSrc, imgDesc, uploader, uploaderName, id, imgPageUrl) {
+      return `<img src="${imgSrc}" alt="${imgDesc}">`;
+    }
+  }
+
+  class GiphyProvider extends Provider {
+    constructor() {
+      super("Giphy");
+    }
+
+    getPoweredBy() {
+      return `<img src="/assets/img/powered-by-giphy.png" style="align-self:center" />`;
+    }
+
+    getApiUrl(query, page, limit, pos) {
+      const offset = (page - 1) * limit;
+      return query
+        ? `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${query}&limit=${limit}&offset=${offset}`
+        : `https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=${limit}&offset=${offset}`;
+    }
+
+    generateHtml(data, limit) {
+      let html = "";
+      if (data.data) {
+        data.data.forEach(function (item) {
+          const uploader = item.username
+            ? `data-uploader="${item.username}"`
+            : "";
+          html += `<div class="image-item"><img src="${item.images.downsized_medium.url}" alt="${item.title}" data-id=${item.id} ${uploader} data-large="${item.images.original.url}"></div>`;
+        });
+      }
+      return html;
+    }
+
+    insertImage(imgSrc, imgDesc, uploader, uploaderName, id, imgPageUrl) {
+      const via = `<span class="addmedia-giphy"></span>`;
+      return `<addmedia><img src="${imgSrc}" class="addmedia" alt="${imgDesc}">${via}</addmedia>`;
+    }
+  }
+
+  class UnsplashProvider extends Provider {
+    constructor() {
+      super("Unsplash");
+    }
+
+    getPoweredBy() {
+      return `<span style="margin:0 auto;">Powered By: <a href=""  rel="nofollow" target="_blank" ><strong>${this.name}</strong></a> </span>`;
+    }
+
+    getApiUrl(query, page, limit, pos) {
+      return query
+        ? `https://api.unsplash.com/search/photos?query=${query}&client_id=${UNSPLASH_ACCESS_KEY}&per_page=${limit}&page=${page}`
+        : `https://api.unsplash.com/photos/random?count=${limit}&client_id=${UNSPLASH_ACCESS_KEY}`;
+    }
+
+    generateHtml(data, limit) {
+      let html = "";
+      const items = data.results || data;
+      items.forEach(function (item) {
+        const uploader = item.user.username
+          ? `data-uploader="${item.user.username}"`
+          : "";
+        const uploaderName = item.user.name
+          ? `data-uploader-name="${item.user.name}"`
+          : "";
+        const downloadLink = item.links.download_location;
+        html += `<div class="image-item"><img src="${item.urls.thumb}" alt="${item.alt_description}"  data-id=${item.id}  ${uploader} data-download-link=${downloadLink} ${uploaderName} data-large="${item.urls.small}"><p style="font-size:12px;">${item.alt_description}</p></div>`;
+      });
+      return html;
+    }
+
+    insertImage(imgSrc, imgDesc, uploader, uploaderName, id, imgPageUrl) {
+      const via = `<span class="addmedia-unsplash">Photo by <a href="https://unsplash.com/@${uploader}">${uploaderName}</a> on <a href="https://unsplash.com/">Unsplash</a></span>`;
+      return `<addmedia><img src="${imgSrc}" class="addmedia" alt="${imgDesc} by ${uploader}">${via}</addmedia>`;
+    }
+  }
+
+  class TenorProvider extends Provider {
+    constructor() {
+      super("Tenor");
+    }
+
+    getPoweredBy() {
+      return `<img src="/assets/img/powered-by-tenor.png" style="align-self:center" />`;
+    }
+
+    getApiUrl(query, page, limit, pos) {
+      return query
+        ? `https://tenor.googleapis.com/v2/search?q=${query}&key=${TENOR_API_KEY}&client_key=testprojectfortenorapi&limit=${limit}&pos=${
+            pos || ""
+          }`
+        : `https://tenor.googleapis.com/v2/featured?key=${TENOR_API_KEY}&client_key=testprojectfortenorapi&limit=${limit}&pos=${
+            pos || ""
+          }`;
+    }
+
+    generateHtml(data, limit) {
+      let html = "";
+      if (data.results) {
+        data.results.forEach(function (item) {
+          const media = item.media_formats.nanogif;
+          const largeMedia =
+            item.media_formats.mediumgif.url || item.media_formats.gif.url;
+          if (media && largeMedia) {
+            html += `<div class="image-item"><img src="${media.url}" alt="${item.content_description}" data-id="${item.id}"  data-large="${largeMedia}"></div>`;
+          }
+        });
+      }
+      return html;
+    }
+
+    insertImage(imgSrc, imgDesc, uploader, uploaderName, id, imgPageUrl) {
+      const via = `<span class="addmedia-tenor"></span>`;
+      return `<addmedia><img src="${imgSrc}" class="addmedia" alt="${imgDesc}">${via}</addmedia>`;
+    }
+  }
+
+  class IndiaForumsProvider extends Provider {
+    constructor() {
+      super("IndiaForums");
+    }
+
+    getPoweredBy() {
+      return `<span style="margin:0 auto;">Powered By: <strong>${this.name}</strong></span>`;
+    }
+
+    getApiUrl(query, page, limit, pos) {
+      return `https://beta.indiaforums.com/api/eximg/ifmedia?q=${encodeURIComponent(
+        query || ""
+      )}&ps=${limit}&pn=${page}`;
+    }
+
+    generateHtml(data, limit) {
+      let html = "";
+      if (data) {
+        data.forEach(function (item) {
+          if (item) {
+            html += `<div class="image-item"><img src="${item.ImageUrl}" alt="${item.MediaTitle}" data-id="${item.MediaId}" data-large="${item.LargeImageUrl}" data-pageurl="${item.PageUrl}"><p style="font-size:12px;">${item.MediaTitle}</p></div>`;
+          }
+        });
+      }
+      return html;
+    }
+
+    insertImage(imgSrc, imgDesc, imgPageUrl) {
+      const via = `<span class="addmedia-indiaforums"><a href="https://www.indiaforums.com${imgPageUrl}">${imgDesc}</a></span>`;
+      return `<addmedia><img src="${imgSrc}" class="addmedia" alt="${imgDesc}">${via}</addmedia>`;
+    }
+  }
+
+  class PixabayProvider extends Provider {
+    constructor() {
+      super("Pixabay");
+    }
+
+    getPoweredBy() {
+      return "";
+    }
+
+    getApiUrl(query, page, limit, pos) {
+      var url = query
+        ? `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(
+            query
+          )}&image_type=photo&per_page=${limit}&page=${page}`
+        : `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&image_type=photo&per_page=${limit}&page=${page}`;
+      console.log(url);
+
+      return url;
+    }
+
+    generateHtml(data, limit) {
+      let html = "";
+      if (data.hits) {
+        data.hits.forEach(function (hit) {
+          hit.webformatURL = hit.webformatURL.replace("_640", "_340");
+          hit.largeImageURL = hit.largeImageURL.replace("_1280", "_640");
+          html += `<div class="image-item"><img src="${hit.webformatURL}" data-large="${hit.largeImageURL}" data-pageurl="${hit.pageURL}" alt="${hit.tags}" data-uploader="${hit.user}" data-id="${hit.id}" data-uploader-name="${hit.user}"><div class="attribution">Photo by <a href="https://pixabay.com/users/${hit.user}-${hit.user_id}" target="_blank">${hit.user}</a> on <a href="https://pixabay.com/" target="_blank">Pixabay</a></div></div>`;
+        });
+      }
+      return html;
+    }
+
+    insertImage(imgSrc, imgDesc, uploader, uploaderName, id, imgPageUrl) {
+      const via = `<span class="addmedia-pixabay">Photo by <a href="https://pixabay.com/users/${uploader}-${id}" target="_blank">${uploader}</a> on <a href="https://pixabay.com/" target="_blank">Pixabay</a></span>`;
+      return `<addmedia><img src="${imgSrc}" class="addmedia" alt="${imgDesc}">${via}</addmedia>`;
+    }
+  }
 
   AddMediaButton = (function (_super) {
     __extends(AddMediaButton, _super);
@@ -53,16 +259,13 @@
     AddMediaButton.prototype.renderMenu = function () {
       var tpl;
       tpl = `<ul class="custom-image-menu">
-       <li data-provider="IndiaForums"> <a href="#" class="menu-item">India Forums</a> </li>
-       <li data-provider="Giphy"> <a href="#" class="menu-item">Giphy</a> </li>
-       <li data-provider="Tenor"> <a href="#" class="menu-item">Tenor</a> </li>
-       <li data-provider="Unsplash"> <a href="#" class="menu-item">Unsplash</a> </li>
-      </ul>`;
+   <li data-provider="IndiaForums"> <a href="#" class="menu-item">India Forums</a> </li>
+   <li data-provider="Giphy"> <a href="#" class="menu-item">Giphy</a> </li>
+   <li data-provider="Tenor"> <a href="#" class="menu-item">Tenor</a> </li>
+   <li data-provider="Unsplash"> <a href="#" class="menu-item">Unsplash</a> </li>
+   <li data-provider="Pixabay"> <a href="#" class="menu-item">Pixabay</a> </li>
+</ul>`;
 
-      // tpl = `<ul class="custom-image-menu">
-      //   <li data-provider="IndiaForums"> <a href="#" class="menu-item">India Forums</a> </li>
-      //   <li data-provider="Tenor"> <a href="#" class="menu-item">Tenor</a> </li>
-      // </ul>`;
       this.menuWrapper.html(tpl);
 
       this.menuWrapper.on(
@@ -77,42 +280,50 @@
       );
     };
 
-    AddMediaButton.prototype.openOverlay = function (provider) {
+    AddMediaButton.prototype.openOverlay = function (providerName) {
       var _this = this;
+      var provider;
 
-      switch (provider) {
+      switch (providerName) {
         case "Giphy":
-          var poweredBy = `<img src="/assets/img/powered-by-giphy.png" style="align-self:center" />`;
+          provider = new GiphyProvider();
           break;
         case "Unsplash":
-          var poweredBy = `<span style="margin:0 auto;">Powered By: <a href=""  rel="nofollow" target="_blank" ><strong>${provider}</strong></a> </span>`;
+          provider = new UnsplashProvider();
           break;
         case "Tenor":
-          var poweredBy = `<img src="/assets/img/powered-by-tenor.png" style="align-self:center" />`;
+          provider = new TenorProvider();
           break;
         case "IndiaForums":
-          var poweredBy = `<span style="margin:0 auto;">Powered By: <strong>${provider}</strong></span>`;
+          provider = new IndiaForumsProvider();
+          break;
+        case "Pixabay":
+          provider = new PixabayProvider();
           break;
         default:
-          var poweredBy = "";
+          provider = new Provider(providerName);
           break;
       }
+
+      var poweredBy = provider.getPoweredBy();
+
       var overlay = $(`
-      <div class="custom-image-overlay">
-        <div class="overlay-content">
-          <span class="close-btn">&times;</span>
-            <h3>${provider} Image Selector</h3>
+        <div class="custom-image-overlay">
+          <div class="overlay-content">
+            <span class="close-btn">&times;</span>
+            <h3>${provider.name} Image Selector</h3>
             <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search ${provider}..." />
-            <button class="search-btn">Search</button>
+              <input type="text" class="search-input" placeholder="Search ${provider.name}..." />
+              <button class="search-btn">Search</button>
             </div>
             ${poweredBy}
             <div class="image-list-wrapper">
-            <div class="image-list"></div>
+              <div class="image-list"></div>
             </div>
             <div class="loader" style="display: none; text-align: center; padding: 10px; aspect-ratio:1/1; margin: 0 auto;"></div>
+          </div>
         </div>
-        </div>`);
+      `);
       $("body").append(overlay);
 
       // Focus the cursor on the search input
@@ -188,15 +399,15 @@
         }
 
         // Insert the image into the editor or your application
-        _this.insertImage(
+        var imgHtml = provider.insertImage(
           imgSrc,
           imgDesc,
-          provider,
           uploader,
           uploaderName,
           id,
           imgPageUrl
         );
+        _this.insertImage(imgHtml, provider.name);
 
         // Remove the overlay after selection
         overlay.remove();
@@ -288,13 +499,14 @@
       query,
       callback
     ) {
-      var url = this.getApiUrl(provider, query, page, limit, pos);
+      var url = provider.getApiUrl(query, page, limit, pos);
 
       $.getJSON(url, function (data) {
-        var html = AddMediaButton.prototype.generateHtml(provider, data, limit);
+        var html = provider.generateHtml(data, limit);
         AddMediaButton.prototype.appendImagesToColumns($list, html);
+
         // Update pos for the next pagination request
-        if (provider === "Tenor" && data.next) {
+        if (provider instanceof TenorProvider && data.next) {
           $list.data("nextPos", data.next);
         }
 
@@ -311,163 +523,19 @@
       pos,
       callback
     ) {
-      var url = this.getApiUrl(provider, query, page, limit, pos);
-
-      console.log("Search URL:", url); // Debugging log
+      var url = provider.getApiUrl(query, page, limit, pos);
 
       $.getJSON(url, function (data) {
-        var html = AddMediaButton.prototype.generateHtml(provider, data, limit);
-
+        var html = provider.generateHtml(data, limit);
         AddMediaButton.prototype.appendImagesToColumns($list, html);
+
         // Update pos for the next pagination request
-        if (provider === "Tenor" && data.next) {
+        if (provider instanceof TenorProvider && data.next) {
           $list.data("nextPos", data.next);
         }
 
         if (callback) callback();
       });
-    };
-
-    AddMediaButton.prototype.getApiUrl = function (
-      provider,
-      query,
-      page,
-      limit,
-      pos
-    ) {
-      var url;
-
-      switch (provider) {
-        case "Giphy":
-          var offset = (page - 1) * limit;
-          url = query
-            ? `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${query}&limit=${limit}&offset=${offset}`
-            : `https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=${limit}&offset=${offset}`;
-
-          break;
-        case "Unsplash":
-          url = query
-            ? `https://api.unsplash.com/search/photos?query=${query}&client_id=${UNSPLASH_ACCESS_KEY}&per_page=${limit}&page=${page}`
-            : `https://api.unsplash.com/photos/random?count=${limit}&client_id=${UNSPLASH_ACCESS_KEY}`;
-
-          break;
-        case "Tenor":
-          url = query
-            ? `https://tenor.googleapis.com/v2/search?q=${query}&key=${TENOR_API_KEY}&client_key=testprojectfortenorapi&limit=${limit}&pos=${
-                pos || ""
-              }`
-            : `https://tenor.googleapis.com/v2/featured?key=${TENOR_API_KEY}&client_key=testprojectfortenorapi&limit=${limit}&pos=${
-                pos || ""
-              }`;
-
-          pos = pos || "";
-
-          break;
-        case "IndiaForums":
-          url = `/api/eximg/ifmedia?q=${encodeURIComponent(
-            query || ""
-          )}&ps=${limit}&pn=${page}`;
-
-          break;
-        default:
-          url = "";
-          break;
-      }
-
-      // switch (provider) {
-      //   case "Giphy":
-      //     url = `/api/eximg/giphy?q=${encodeURIComponent(
-      //       query || ""
-      //     )}&pn=${page}&ps=${limit}`;
-      //     break;
-      //   case "Unsplash":
-      //     url = `/api/eximg/unsplash?q=${encodeURIComponent(
-      //       query || ""
-      //     )}&pn=${page}&ps=${limit}`;
-      //     break;
-      //   case "Tenor":
-      //     pos = pos || "";
-
-      //     url = `/api/eximg/tenor?q=${encodeURIComponent(
-      //       query || ""
-      //     )}&ps=${limit}&pn=${page}&pc=${pos}`;
-      //     break;
-      //   case "IndiaForums":
-      //     url = `/api/eximg/ifmedia?q=${encodeURIComponent(
-      //       query || ""
-      //     )}&ps=${limit}&pn=${page}`;
-      //     break;
-      //   default:
-      //     url = "";
-      //     break;
-      // }
-
-      return url;
-    };
-
-    AddMediaButton.prototype.generateHtml = function (provider, data, limit) {
-      var html = "";
-      switch (provider) {
-        case "Giphy":
-          if (data.data) {
-            data.data.forEach(function (item) {
-              var uploader = item.username
-                ? `data-uploader="${item.username}"`
-                : "";
-
-              html += `<div class="image-item"><img src="${item.images.downsized_medium.url}" alt="${item.title}" data-id=${item.id} ${uploader} data-large="${item.images.original.url}"></div>`;
-            });
-          }
-          break;
-        case "Unsplash":
-          var items = data.results || data;
-          items.forEach(function (item) {
-            var uploader = item.user.username
-              ? `data-uploader="${item.user.username}"`
-              : "";
-
-            var uploaderName = item.user.name
-              ? `data-uploader-name="${item.user.name}"`
-              : "";
-
-            var downloadLink = item.links.download_location;
-
-            html += `<div class="image-item"><img src="${item.urls.thumb}" alt="${item.alt_description}"  data-id=${item.id}  ${uploader} data-download-link=${downloadLink} ${uploaderName} data-large="${item.urls.small}"><p style="font-size:12px;">${item.alt_description}</p></div>`;
-          });
-          break;
-        case "Tenor":
-          if (data.results) {
-            data.results.forEach(function (item) {
-              var media = item.media_formats.nanogif;
-
-              var largeMedia =
-                item.media_formats.mediumgif.url || item.media_formats.gif.url;
-
-              if (media && largeMedia) {
-                html += `<div class="image-item"><img src="${media.url}" alt="${item.content_description}" data-id="${item.id}"  data-large="${largeMedia}"></div>`;
-              }
-            });
-          }
-          break;
-        case "IndiaForums":
-          if (data) {
-            data.forEach(function (item) {
-              if (item) {
-                html += `<div class="image-item"><img src="${item.ImageUrl}" alt="${item.MediaTitle}" data-id="${item.MediaId}" data-large="${item.LargeImageUrl}" data-pageurl="${item.PageUrl}"><p style="font-size:12px;">${item.MediaTitle}</p></div>`;
-              }
-            });
-          }
-          break;
-        default:
-          html = "";
-          break;
-      }
-      var imgCount = (html.match(/<img\b/g) || []).length;
-      // console.log(imgCount);
-      if (imgCount < limit) {
-        $(".image-list-wrapper").off("scroll");
-      }
-      return html;
     };
 
     AddMediaButton.prototype.appendImagesToColumns = function ($list, html) {
@@ -481,45 +549,32 @@
       });
     };
 
-    AddMediaButton.prototype.insertImage = function (
-      imgSrc,
-      imgDesc,
-      provider,
-      uploader,
-      uploaderName,
-      id,
-      imgPageUrl
-    ) {
-      provider = provider.toLowerCase();
+    AddMediaButton.prototype.insertImage = function (imgHtml, providerName) {
+      var provider;
 
-      var via;
-      var width;
-
-      switch (provider) {
+      switch (providerName.toLowerCase()) {
+        case "giphy":
+          provider = new GiphyProvider();
+          break;
         case "unsplash":
-          via = `<span class="addmedia-${provider}">Photo by <a href="https://unsplash.com/@${uploader}">${uploaderName}</a> on <a href="https://unsplash.com/">Unsplash</a></span>`;
+          provider = new UnsplashProvider();
+          break;
+        case "tenor":
+          provider = new TenorProvider();
           break;
         case "indiaforums":
-          via = `<span class="addmedia-${provider}"><a href="https://www.indiaforums.com${imgPageUrl}">${imgDesc}</a></span>`;
-          width = ` width = "600"`;
+          provider = new IndiaForumsProvider();
           break;
-
+        case "pixabay":
+          provider = new PixabayProvider();
+          break;
         default:
-          via = `<span class="addmedia-${provider}" />`;
+          provider = new Provider(providerName);
           break;
       }
 
-      var alt = uploader
-        ? ` alt="${imgDesc} by ${uploader}"`
-        : ` alt="${imgDesc}"`;
-
-      var img = `<img src="${imgSrc}" class="addmedia"${alt}${width}>`;
-
-      // Wrap the img and via elements in a container div
-      var containerHtml = `<addmedia>${img}${via}</addmedia>`;
-
       // Create a jQuery object for the container
-      var $container = $(containerHtml);
+      var $container = $(imgHtml);
 
       this.editor.focus();
 

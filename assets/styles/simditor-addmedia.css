@@ -101,6 +101,7 @@
 
 .addmedia {
   display: block;
+  max-width: 100%;
   margin: 0 auto !important;
 }
 
@@ -120,7 +121,8 @@
 }
 
 .addmedia-unsplash,
-.addmedia-indiaforums {
+.addmedia-indiaforums,
+.addmedia-pixabay {
   display: block;
   padding-bottom: 0.75rem;
   font-size: 12px;
